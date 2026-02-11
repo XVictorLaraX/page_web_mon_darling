@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi San Valentín?</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #c70039;
+            margin-top: 40px;
+            animation: aparecer 2s ease-in-out;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .poema {
+            display: inline-block;
+            max-width: 600px;
+            margin: 30px auto;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            background: linear-gradient(135deg, #ffffff, #ffe5ec);
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            font-style: italic;
+            color: #d63384;
+            border: 2px solid #ff85a2;
+            position: relative;
+            min-height: 280px; /* mantiene el cuadro estático */
+        }
+
+        .poema::before {
+            content: "💞";
+            position: absolute;
+            top: -18px;
+            left: -18px;
+            font-size: 50px;
+        }
+
+        .poema::after {
+            content: "💞";
+            position: absolute;
+            bottom: -18px;
+            right: -18px;
+            font-size: 50px;
+        }
+
+        .heart-collage {
+            display: grid;
+            grid-template-columns: repeat(5, 160px);
+            grid-template-rows: repeat(5, 160px);
+            justify-content: center;
+            gap: 15px;
+            margin: 50px auto;
+        }
+
+        .heart-collage img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 25px;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+            transition: transform 0.3s;
+        }
+
+        .heart-collage img:hover {
+            transform: scale(1.1);
+        }
+
+        .heart-collage img:nth-child(1) { grid-column: 2; grid-row: 1; }
+        .heart-collage img:nth-child(2) { grid-column: 4; grid-row: 1; }
+
+        .heart-collage img:nth-child(3) { grid-column: 1; grid-row: 2; }
+        .heart-collage img:nth-child(4) { grid-column: 3; grid-row: 2; }
+        .heart-collage img:nth-child(5) { grid-column: 5; grid-row: 2; }
+
+        .heart-collage img:nth-child(6) { grid-column: 1; grid-row: 3; }
+        .heart-collage img:nth-child(7) { grid-column: 2; grid-row: 3; }
+        .heart-collage img:nth-child(8) { grid-column: 3; grid-row: 3; }
+        .heart-collage img:nth-child(9) { grid-column: 4; grid-row: 3; }
+        .heart-collage img:nth-child(10){ grid-column: 5; grid-row: 3; }
+
+        .heart-collage img:nth-child(11) { grid-column: 2; grid-row: 4; }
+        .heart-collage img:nth-child(12) { grid-column: 3; grid-row: 4; }
+        .heart-collage img:nth-child(13) { grid-column: 4; grid-row: 4; }
+
+        .heart-collage img:nth-child(14) { grid-column: 3; grid-row: 5; }
+
+        button {
+            margin: 30px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(45deg, #ff4d6d, #ff758f);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        button:hover { transform: scale(1.12); }
+
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 45px;
+            animation: flotar 6s linear forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-120vh); opacity: 0; }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff0f3, #ffe5ec);
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            color: #c9184a;
+            font-size: 1.3rem;
+            max-width: 300px;
+            max-height: 150px;
+            position: relative;
+            animation: zoomIn 0.5s ease;
+            border: 3px solid #ff85a2;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+        }
+
+        .modal-content::before {
+            content: "❤️";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .mostrar { visibility: visible; opacity: 1; }
+
+        .cerrar {
+            margin-top: 10px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #ff4d6d, #ff758f);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cerrar:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<h1>¿Quieres ser mi San Valentín?</h1>
+
+<div class="poema">
+    <span id="textoPoema"></span>
+</div>
+
+<div class="heart-collage">
+        <img src="fotos/retouch_2024090523225317.png">
+        <img src="fotos/20240916_030724.jpg">
+        <img src="fotos/20240903_175130.jpg">
+        <img src="fotos/20241031_140211.jpg">
+        <img src="fotos/20241107_143809.jpg">
+        <img src="fotos/20241121_160335.jpg">
+        <img src="fotos/20241127_175602.jpg">
+        <img src="fotos/20250106_103437.jpg">
+        <img src="fotos/20251118_163818.jpg">
+        <img src="fotos/IMG-20241112-WA0011.jpg">
+        <img src="fotos/IMG-20251212-WA0009.jpg">
+        <img src="fotos/IMG-20251214-WA0017.jpg">
+        <img src="fotos/20260103_155827.jpg">
+        <img src="fotos/IMG-20251226-WA0009.jpg">
+</div>
+
+<button onclick="mostrarModal()">❤️ Sí, quiero ❤️</button>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        Sabía que dirías que sí <br><br>
+        💕 Te Amo, Ratoncita 💕<br><br>
+        <button class="cerrar" onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+
+const parrafos = [
+`Desde que llegaste a mi vida,`,
+`todo tiene más color y más alegría.`,
+`Eres mi sonrisa inesperada,
+mi abrazo favorito y mi lugar seguro.`,
+`No necesito una fecha especial
+para recordarte cuánto te amo,`,
+`pero hoy quiero preguntarte algo
+que nace directo del corazón:`,
+`¿Me regalas este San Valentín
+como yo te regalo mi amor cada día?`
+];
+
+const elemento = document.getElementById("textoPoema");
+let index = 0;
+
+function mostrarParrafo() {
+    if (index < parrafos.length) {
+        const p = document.createElement("p");
+        p.innerHTML = parrafos[index].replace(/\n/g, "<br>");
+        p.style.opacity = 0;
+        p.style.margin = "8px 0";
+        elemento.appendChild(p);
+
+        setTimeout(() => {
+            p.style.transition = "opacity 0.8s ease";
+            p.style.opacity = 1;
+        }, 100);
+
+        index++;
+        setTimeout(mostrarParrafo, 900);
+    }
+}
+
+window.onload = mostrarParrafo;
+
+
+const modal = document.getElementById('modal');
+
+function mostrarModal() {
+    modal.classList.add('mostrar');
+    for(let i=0;i<15;i++) crearCorazon();
+}
+
+function cerrarModal() {
+    modal.classList.remove('mostrar');
+}
+
+function crearCorazon() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 6000);
+}
+
+setInterval(crearCorazon, 700);
+</script>
+
+</body>
+</html>
